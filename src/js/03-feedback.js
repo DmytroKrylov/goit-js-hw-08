@@ -5,10 +5,6 @@ const form = document.querySelector('.feedback-form');
 const emailInput = form.querySelector('input[name="email"]');
 const messageInput = form.querySelector('textarea[name="message"]');
 
-window.addEventListener('load', loadFormState);
-form.addEventListener('input', saveFormState);
-form.addEventListener('submit', onFormSubmit);
-
 // Функція, яка зберігає стан форми в локальне сховище
 const saveFormState = _.throttle(() => {
   const formState = {
@@ -27,6 +23,10 @@ const loadFormState = () => {
     messageInput.value = formState.message;
   }
 };
+
+window.addEventListener('load', loadFormState);
+form.addEventListener('input', saveFormState);
+form.addEventListener('submit', onFormSubmit);
 
 function onFormSubmit(event) {
   event.preventDefault();
