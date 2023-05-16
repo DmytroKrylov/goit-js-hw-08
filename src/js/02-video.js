@@ -8,8 +8,8 @@ const iframe = document.getElementById('vimeo-player');
 const player = new Player(iframe);
 
 // Отримуємо поточний час відтворення та зберігаємо його у локальне сховище
-function saveCurrentTime(time) {
-  localStorage.setItem('videoplayer-current-time', time);
+function saveCurrentTime({ seconds }) {
+  localStorage.setItem('videoplayer-current-time', seconds);
 }
 
 // Відновлюємо відтворення зі збереженого часу після перезавантаження сторінки
@@ -20,13 +20,8 @@ function restorePlayback() {
   }
 }
 
-// Оновлюємо час відтворення зі збереженням у локальному сховищі
-const updateCurrentTime = throttle(event => {
-  saveCurrentTime(event.seconds);
-}, 1000);
-
 // Відстежуємо подію timeupdate - оновлення часу відтворення
-player.on('timeupdate', updateCurrentTime);
+player.on('timeupdate', throttle(saveCurrentTime, 1000));
 
 // Викликаємо функцію для відновлення відтворення після перезавантаження сторінки
 restorePlayback();

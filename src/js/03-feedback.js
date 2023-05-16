@@ -5,6 +5,10 @@ const form = document.querySelector('.feedback-form');
 const emailInput = form.querySelector('input[name="email"]');
 const messageInput = form.querySelector('textarea[name="message"]');
 
+window.addEventListener('load', loadFormState);
+form.addEventListener('input', saveFormState);
+form.addEventListener('submit', onFormSubmit);
+
 // Функція, яка зберігає стан форми в локальне сховище
 const saveFormState = _.throttle(() => {
   const formState = {
@@ -24,28 +28,20 @@ const loadFormState = () => {
   }
 };
 
-// Виклик функцій для завантаження збереженого стану форми при завантаженні сторінки
-window.addEventListener('load', loadFormState);
-
-// Відстежування події input для полів форми
-emailInput.addEventListener('input', saveFormState);
-messageInput.addEventListener('input', saveFormState);
-
-// Отримання події submit форми
-form.addEventListener('submit', event => {
+function onFormSubmit(event) {
   event.preventDefault();
-
-  // Очищення полів форми
-  emailInput.value = '';
-  messageInput.value = '';
 
   // Очищення локального сховища
   localStorage.removeItem('feedback-form-state');
 
   // Виведення даних у консоль
   const formState = {
-    email: '',
-    message: '',
+    email: emailInput.value,
+    message: messageInput.value,
   };
   console.log('Form submitted:', formState);
-});
+
+  // Очищення полів форми
+  emailInput.value = '';
+  messageInput.value = '';
+}
